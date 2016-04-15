@@ -88,16 +88,17 @@ handleGuess puzzle guess = do
 
 gameOver :: Puzzle -> IO ()
 gameOver (Puzzle wordToGuess _ guessed) =
-  if (length guessed) > 7 then
+  if (length incorrectGuesses) > 7 then
     do putStrLn "You lose!"
        putStrLn $ "The word was: " ++ wordToGuess
        exitSuccess
   else return ()
+    where incorrectGuesses = filter (flip notElem wordToGuess) guessed
 
 gameWin :: Puzzle -> IO ()
-gameWin (Puzzle _ filledInSoFar _) =
+gameWin (Puzzle wordToGuess filledInSoFar _) =
   if all isJust filledInSoFar then
-    do putStrLn "You win!"
+    do putStrLn $ "You win! The word was" ++ wordToGuess
        exitSuccess
   else return ()
 
